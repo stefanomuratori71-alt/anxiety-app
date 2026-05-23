@@ -1689,7 +1689,7 @@ const EXERCISES_TIMED = [
   },
   {
     title:'Progressive Muscle Relaxation', icon:'💪', tag:'Body',
-    sub:'Release tension you didn't even know you were holding',
+    sub:"Release tension you didn't even know you were holding",
     steps:[
       { text:'Hands: Squeeze into fists for 5 sec → release for 10', secs: 15 },
       { text:'Arms: Flex your biceps → then let go completely', secs: 15 },
@@ -1718,7 +1718,7 @@ const EXERCISES_TIMED = [
     title:'Worry Sorting', icon:'🔥', tag:'CBT',
     sub:'Take back control by sorting your worries',
     steps:[
-      { text:'Write down ALL your current worries — don't filter, just list.', secs: null },
+      { text:"Write down ALL your current worries — don't filter, just list.", secs: null },
       { text:'Mark each one: [C] Can Control  or  [N] Cannot Control', secs: null },
       { text:'For [N] worries: acknowledge them, then practise letting go.', secs: null },
       { text:'For [C] worries: pick ONE and write the smallest possible first step.', secs: null },
@@ -2023,7 +2023,7 @@ function toggleLadderStep(stepId) {
   S.set('ladders', ladders);
   renderLadderSteps(ladder);
   if (step.done) {
-    showToast('Step completed! 🎉 You're making progress 💪');
+    showToast("Step completed! 🎉 You're making progress 💪");
     if (navigator.vibrate) navigator.vibrate([100, 50, 200]);
     // check if whole ladder done
     if (ladder.steps.every(s => s.done)) {
