@@ -337,6 +337,18 @@ textarea:focus { border-color:var(--purple-light); }
     </div>
   </div>
 
+  <!-- Home progress bar -->
+  <div style="background:var(--card);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:14px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:13px;font-weight:600;color:var(--text)">Your progress</span>
+      <span style="font-size:13px;color:var(--teal);font-weight:600" id="home-milestone-label">0 / 12</span>
+    </div>
+    <div style="background:var(--card2);border-radius:99px;height:8px;overflow:hidden">
+      <div id="home-milestone-bar" style="height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--purple-light));width:0%;transition:width 0.6s ease"></div>
+    </div>
+    <p id="home-milestone-next" style="font-size:11px;color:var(--text2);margin-top:6px">Complete your first check-in to start!</p>
+  </div>
+
   <div class="quote-card">
     <p class="quote-text" id="daily-quote"></p>
     <button class="quote-refresh" onclick="newQuote()">↻ New quote</button>
@@ -519,6 +531,74 @@ textarea:focus { border-color:var(--purple-light); }
   </div>
 </div>
 
+<!-- ══ EXPOSURE LADDER SCREEN ══ -->
+<div class="screen" id="screen-ladder">
+  <h2 class="section-title">Exposure Ladder 🪜</h2>
+  <p class="section-sub">Face fears gradually — one step at a time</p>
+
+  <!-- ladder list -->
+  <div id="ladder-list"></div>
+
+  <!-- create new ladder -->
+  <div class="card" style="margin-bottom:14px">
+    <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px">+ New Ladder</p>
+    <input id="ladder-fear-input" type="text" placeholder="What fear are you working on?"
+      style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);
+             color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 12px;
+             box-sizing:border-box;margin-bottom:10px">
+    <button class="btn btn-teal" style="width:100%" onclick="createLadder()">Create Ladder</button>
+  </div>
+
+  <div class="card" style="background:rgba(6,214,160,0.06);border-color:rgba(6,214,160,0.2)">
+    <p style="font-size:12px;color:var(--text2);line-height:1.6;margin:0">
+      <strong style="color:var(--teal)">How it works:</strong> Break a fear into small steps from least to most scary.
+      Start at step 1. Repeat it until your anxiety drops, then move up.
+      Feeling anxious during exposure is normal — it means it's working. 💪
+    </p>
+  </div>
+</div>
+
+<!-- ══ LADDER DETAIL SCREEN ══ -->
+<div class="screen" id="screen-ladder-detail">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+    <button class="btn btn-outline" style="padding:8px 14px;font-size:13px" onclick="showScreen('ladder')">← Back</button>
+    <h2 class="section-title" style="margin:0;flex:1" id="ladder-detail-title">My Ladder</h2>
+    <button style="background:none;border:none;color:var(--pink);font-size:13px;cursor:pointer;padding:8px"
+      onclick="deleteLadder()">Delete</button>
+  </div>
+  <p class="section-sub" id="ladder-detail-fear"></p>
+
+  <!-- progress mini bar -->
+  <div style="background:var(--card);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px">
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+      <span style="font-size:12px;color:var(--text2)" id="ladder-progress-label">0 / 0 steps done</span>
+      <span style="font-size:12px;color:var(--teal)" id="ladder-progress-pct">0%</span>
+    </div>
+    <div style="background:var(--card2);border-radius:99px;height:6px;overflow:hidden">
+      <div id="ladder-progress-bar" style="height:100%;border-radius:99px;background:var(--teal);width:0%;transition:width 0.5s"></div>
+    </div>
+  </div>
+
+  <!-- steps list -->
+  <div id="ladder-steps-list"></div>
+
+  <!-- add step -->
+  <div class="card" style="margin-bottom:14px">
+    <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px">+ Add Step</p>
+    <input id="ladder-step-input" type="text" placeholder="Describe this step..."
+      style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);
+             color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 12px;
+             box-sizing:border-box;margin-bottom:8px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <label style="font-size:13px;color:var(--text2);white-space:nowrap">Fear level:</label>
+      <input type="range" id="ladder-fear-level" min="1" max="10" value="5" step="1"
+        style="flex:1" oninput="document.getElementById('ladder-fear-val').textContent=this.value">
+      <span id="ladder-fear-val" style="font-size:14px;font-weight:600;color:var(--teal);min-width:24px">5</span>
+    </div>
+    <button class="btn btn-teal" style="width:100%" onclick="addLadderStep()">Add Step</button>
+  </div>
+</div>
+
 <!-- ══ THOUGHT RECORD SCREEN ══ -->
 <div class="screen" id="screen-cbt">
   <h2 class="section-title">Thought Record 🧠</h2>
@@ -633,6 +713,9 @@ textarea:focus { border-color:var(--purple-light); }
   </button>
   <button class="nav-btn" data-screen="cbt" onclick="showScreen('cbt')">
     <span class="icon">🧠</span><span>CBT</span>
+  </button>
+  <button class="nav-btn" data-screen="ladder" onclick="showScreen('ladder')">
+    <span class="icon">🪜</span><span>Ladder</span>
   </button>
   <button class="nav-btn" data-screen="journal" onclick="showScreen('journal')">
     <span class="icon">✍️</span><span>Journal</span>
@@ -904,7 +987,7 @@ function init() {
   updateJournalPrompt();
 
   // deep link: if URL has a #hash, navigate to that screen
-  const validScreens = ['home','mood','breathe','exercises','journal','progress','cbt','cbt-history'];
+  const validScreens = ['home','mood','breathe','exercises','journal','progress','cbt','cbt-history','ladder','ladder-detail'];
   const hash = window.location.hash.replace('#','');
   if (hash && validScreens.includes(hash)) {
     showScreen(hash);
@@ -915,6 +998,9 @@ function init() {
 
   // check if onboarding needed (first visit)
   checkOnboarding();
+
+  // update home progress bar on load
+  updateHomeProgress();
 }
 
 // ── QUOTE ─────────────────────────────────────────────────────────────────────
@@ -929,13 +1015,14 @@ function showScreen(name) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
   // cbt-history shares the cbt nav button
-  const navTarget = name === 'cbt-history' ? 'cbt' : name;
+  const navTarget = name === 'cbt-history' ? 'cbt' : name === 'ladder-detail' ? 'ladder' : name;
   const navBtn = document.querySelector(`[data-screen="${navTarget}"]`);
   if (navBtn) navBtn.classList.add('active');
   if(name==='progress')    updateProgress();
   if(name==='mood')        renderMoodHistory();
   if(name==='journal')     renderJournalHistory();
   if(name==='cbt-history') renderCbtHistory();
+  if(name==='ladder')       renderLadderList();
   history.replaceState(null, '', '#' + name);
 }
 
@@ -980,6 +1067,7 @@ function saveMood() {
   updateLastMood();
   renderMoodHistory();
   showToast('Check-in saved! 💜');
+  updateHomeProgress();
 }
 
 function renderMoodHistory() {
@@ -1166,6 +1254,7 @@ function saveJournal() {
   S.set('journal_entries', entries);
   renderJournalHistory();
   showToast('Journal entry saved! ✍️');
+  updateHomeProgress();
 }
 
 function renderJournalHistory() {
@@ -1488,6 +1577,7 @@ function cbtSave() {
   }).join('');
 
   showToast('Thought Record saved! 🧠');
+  updateHomeProgress();
   updateProgress();
 }
 
@@ -1550,6 +1640,7 @@ exportData = function() {
     journal_entries: S.get('journal_entries') || {},
     journal_prompt:  S.get('journal_prompt')  || 0,
     cbt_records:     S.get('cbt_records')     || [],
+    ladders:         S.get('ladders')         || [],
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
   const url  = URL.createObjectURL(blob);
@@ -1577,6 +1668,7 @@ importData = function(event) {
       if (data.journal_entries) S.set('journal_entries', data.journal_entries);
       if (data.journal_prompt != null) S.set('journal_prompt', data.journal_prompt);
       if (data.cbt_records)     S.set('cbt_records',     data.cbt_records);
+      if (data.ladders)         S.set('ladders',         data.ladders);
       currentPrompt = data.journal_prompt || 0;
       updateJournalPrompt();
       updateStreak();
@@ -1590,6 +1682,402 @@ importData = function(event) {
   reader.readAsText(file);
   event.target.value = '';
 };
+
+
+// ── HOME PROGRESS BAR ────────────────────────────────────────────────────────
+function updateHomeProgress() {
+  const milestones = getWorkbookMilestones();
+  const done  = milestones.filter(m => m.done).length;
+  const total = milestones.length;
+  const pct   = Math.round(done / total * 100);
+  const bar   = document.getElementById('home-milestone-bar');
+  const label = document.getElementById('home-milestone-label');
+  const next  = document.getElementById('home-milestone-next');
+  if (!bar) return;
+  bar.style.width   = pct + '%';
+  label.textContent = `${done} / ${total}`;
+  const nextMilestone = milestones.find(m => !m.done);
+  next.textContent = nextMilestone ? `Next: ${nextMilestone.label}` : '🎉 All milestones completed!';
+}
+
+// ── EXERCISES WITH TIMER ─────────────────────────────────────────────────────
+// Each exercise step can have an optional duration in seconds
+const EXERCISES_TIMED = [
+  {
+    title:'5-4-3-2-1 Grounding', icon:'🌍', tag:'Mindfulness',
+    sub:'Brings you back to the present moment instantly',
+    steps:[
+      { text:'5 things you can SEE — look around slowly', secs: 30 },
+      { text:'4 things you can TOUCH — notice texture and temperature', secs: 25 },
+      { text:'3 things you can HEAR — listen carefully, even small sounds', secs: 20 },
+      { text:'2 things you can SMELL — or remember a smell you love', secs: 15 },
+      { text:'1 thing you can TASTE — right now or recently', secs: 10 },
+      { text:'Take 3 deep breaths. You are safe, you are here, you are okay.', secs: 20 },
+    ]
+  },
+  {
+    title:'Progressive Muscle Relaxation', icon:'💪', tag:'Body',
+    sub:'Release tension you didn't even know you were holding',
+    steps:[
+      { text:'Hands: Squeeze into fists for 5 sec → release for 10', secs: 15 },
+      { text:'Arms: Flex your biceps → then let go completely', secs: 15 },
+      { text:'Shoulders: Shrug up to your ears → drop and relax', secs: 15 },
+      { text:'Face: Scrunch everything tight → release', secs: 15 },
+      { text:'Stomach: Tighten your abs → let go', secs: 15 },
+      { text:'Legs: Flex your thighs → release', secs: 15 },
+      { text:'Feet: Curl your toes → release', secs: 15 },
+      { text:'Whole body: Tense everything → release and breathe deeply', secs: 20 },
+    ]
+  },
+  {
+    title:'Body Scan', icon:'🧘', tag:'Mindfulness',
+    sub:'A 5–10 minute check-in with your whole body',
+    steps:[
+      { text:'Lie down or sit comfortably. Close your eyes.', secs: 10 },
+      { text:'Take 3 slow, deep breaths to settle in.', secs: 15 },
+      { text:'Bring attention to your feet. Are they tense? Relax them.', secs: 30 },
+      { text:'Move slowly up: calves, knees, thighs, hips — relax each part.', secs: 40 },
+      { text:'Continue: stomach, chest, shoulders, arms, hands.', secs: 40 },
+      { text:'Finally: neck, jaw, eyes, forehead. Let everything go.', secs: 30 },
+      { text:'Take 3 final deep breaths. Slowly open your eyes. 💜', secs: 20 },
+    ]
+  },
+  {
+    title:'Worry Sorting', icon:'🔥', tag:'CBT',
+    sub:'Take back control by sorting your worries',
+    steps:[
+      { text:'Write down ALL your current worries — don't filter, just list.', secs: null },
+      { text:'Mark each one: [C] Can Control  or  [N] Cannot Control', secs: null },
+      { text:'For [N] worries: acknowledge them, then practise letting go.', secs: null },
+      { text:'For [C] worries: pick ONE and write the smallest possible first step.', secs: null },
+      { text:'Take that tiny step — even just one message or one decision.', secs: null },
+      { text:'Remind yourself: worrying about [N] things costs energy and changes nothing.', secs: null },
+    ]
+  },
+  {
+    title:'Safe Place Visualisation', icon:'🏡', tag:'Mindfulness',
+    sub:'Create your mental sanctuary in 5 minutes',
+    steps:[
+      { text:'Sit or lie comfortably. Close your eyes. Take 3 deep breaths.', secs: 15 },
+      { text:'Imagine a place where you feel completely safe and at peace.', secs: 30 },
+      { text:'See it clearly: what colours, shapes, light do you see?', secs: 30 },
+      { text:'What sounds are there? Wind, water, silence, music?', secs: 30 },
+      { text:'What can you feel? Warmth, a breeze, soft ground?', secs: 30 },
+      { text:'Stay here for a few minutes. You can return anytime you need.', secs: 120 },
+      { text:'Slowly open your eyes, carrying that calm with you.', secs: 10 },
+    ]
+  },
+];
+
+// Timer state — one active timer per exercise
+const exTimers = {};  // exIdx -> { stepIdx, remaining, interval, running }
+
+function buildExercises() {
+  const colors = ['var(--teal)','var(--purple-light)','var(--orange)','var(--pink)','var(--yellow)','var(--teal)'];
+  document.getElementById('exercises-list').innerHTML = EXERCISES_TIMED.map((ex, i) => `
+    <div class="exercise-card">
+      <div class="exercise-header" onclick="toggleExercise(${i})">
+        <span class="exercise-icon">${ex.icon}</span>
+        <div style="flex:1">
+          <p class="exercise-title">${ex.title}</p>
+          <p class="exercise-sub">${ex.sub}</p>
+        </div>
+        <span style="font-size:18px;color:var(--text2)" id="ex-arrow-${i}">▸</span>
+      </div>
+      <span class="tag" style="background:rgba(255,255,255,0.08);color:${colors[i]};border:1px solid ${colors[i]}40">${ex.tag}</span>
+      <div class="exercise-detail" id="ex-detail-${i}">
+        <div id="ex-steps-${i}">
+          ${ex.steps.map((s,j) => renderExStep(i, j, s, ex.steps.length)).join('')}
+        </div>
+        <button class="btn btn-outline" style="width:100%;margin-top:12px;font-size:13px"
+          onclick="resetExercise(${i})">↺ Reset exercise</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderExStep(exI, stepJ, step, total) {
+  const hasSecs = step.secs !== null;
+  const mins = hasSecs ? Math.floor(step.secs/60) : 0;
+  const secs = hasSecs ? step.secs % 60 : 0;
+  const timeLabel = hasSecs
+    ? (mins > 0 ? `${mins}m ${secs>0?secs+'s':''}` : `${secs}s`)
+    : '';
+  return `
+    <div id="ex-step-${exI}-${stepJ}" style="
+      display:flex;align-items:flex-start;gap:10px;padding:10px 0;
+      border-bottom:${stepJ<total-1?'1px solid var(--border)':'none'}">
+      <div id="ex-dot-${exI}-${stepJ}" style="
+        width:24px;height:24px;border-radius:50%;flex-shrink:0;margin-top:2px;
+        background:var(--card2);border:1.5px solid var(--border);
+        display:flex;align-items:center;justify-content:center;
+        font-size:11px;color:var(--text2);cursor:pointer;transition:all 0.2s"
+        onclick="completeExStep(${exI},${stepJ})">${stepJ+1}</div>
+      <div style="flex:1;min-width:0">
+        <p id="ex-text-${exI}-${stepJ}" style="font-size:13px;color:var(--text);line-height:1.5;margin:0 0 6px">${step.text}</p>
+        ${hasSecs ? `
+        <div style="display:flex;align-items:center;gap:8px">
+          <div id="ex-timer-ring-${exI}-${stepJ}" style="
+            width:36px;height:36px;border-radius:50%;flex-shrink:0;
+            background:conic-gradient(var(--teal) 0%, var(--card2) 0%);
+            display:flex;align-items:center;justify-content:center">
+            <div style="width:26px;height:26px;border-radius:50%;background:var(--card);
+              display:flex;align-items:center;justify-content:center">
+              <span id="ex-timer-${exI}-${stepJ}" style="font-size:10px;font-weight:600;color:var(--teal)">${timeLabel}</span>
+            </div>
+          </div>
+          <button id="ex-play-${exI}-${stepJ}" class="btn btn-outline"
+            style="font-size:12px;padding:5px 12px"
+            onclick="toggleExTimer(${exI},${stepJ},${step.secs})">▶ Start</button>
+        </div>` : ''}
+      </div>
+    </div>`;
+}
+
+function toggleExercise(i) {
+  const detail = document.getElementById('ex-detail-'+i);
+  const arrow  = document.getElementById('ex-arrow-'+i);
+  const open   = detail.classList.toggle('open');
+  arrow.textContent = open ? '▾' : '▸';
+}
+
+function toggleExTimer(exI, stepJ, totalSecs) {
+  const key = `${exI}-${stepJ}`;
+  if (!exTimers[key]) {
+    exTimers[key] = { remaining: totalSecs, running: false, interval: null };
+  }
+  const t = exTimers[key];
+  if (t.running) {
+    // pause
+    clearInterval(t.interval);
+    t.running = false;
+    document.getElementById(`ex-play-${exI}-${stepJ}`).textContent = '▶ Resume';
+  } else {
+    // start/resume
+    t.running = true;
+    document.getElementById(`ex-play-${exI}-${stepJ}`).textContent = '⏸ Pause';
+    t.interval = setInterval(() => {
+      t.remaining--;
+      updateExTimerDisplay(exI, stepJ, t.remaining, totalSecs);
+      if (t.remaining <= 0) {
+        clearInterval(t.interval);
+        t.running = false;
+        completeExStep(exI, stepJ);
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      }
+    }, 1000);
+  }
+}
+
+function updateExTimerDisplay(exI, stepJ, remaining, total) {
+  const pct = ((total - remaining) / total) * 100;
+  const ring = document.getElementById(`ex-timer-ring-${exI}-${stepJ}`);
+  const lbl  = document.getElementById(`ex-timer-${exI}-${stepJ}`);
+  if (!ring) return;
+  ring.style.background = `conic-gradient(var(--teal) ${pct}%, var(--card2) ${pct}%)`;
+  const m = Math.floor(remaining/60);
+  const s = remaining % 60;
+  lbl.textContent = m > 0 ? `${m}m${s>0?s+'s':''}` : `${s}s`;
+  if (remaining <= 0) {
+    lbl.textContent = '✓';
+    const btn = document.getElementById(`ex-play-${exI}-${stepJ}`);
+    if (btn) btn.style.display = 'none';
+  }
+}
+
+function completeExStep(exI, stepJ) {
+  const dot  = document.getElementById(`ex-dot-${exI}-${stepJ}`);
+  const text = document.getElementById(`ex-text-${exI}-${stepJ}`);
+  if (!dot) return;
+  dot.style.background  = 'var(--teal)';
+  dot.style.border      = '1.5px solid var(--teal)';
+  dot.style.color       = '#fff';
+  dot.textContent       = '✓';
+  text.style.color      = 'var(--text2)';
+  text.style.textDecoration = 'line-through';
+  // check if all steps done
+  const ex    = EXERCISES_TIMED[exI];
+  const allDone = ex.steps.every((_,j) => {
+    const d = document.getElementById(`ex-dot-${exI}-${j}`);
+    return d && d.textContent === '✓';
+  });
+  if (allDone) {
+    showToast(`${ex.icon} ${ex.title} complete! Well done 🎉`);
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300]);
+  }
+}
+
+function resetExercise(exI) {
+  // clear timers
+  EXERCISES_TIMED[exI].steps.forEach((_,j) => {
+    const key = `${exI}-${j}`;
+    if (exTimers[key]) { clearInterval(exTimers[key].interval); delete exTimers[key]; }
+  });
+  // re-render steps
+  document.getElementById(`ex-steps-${exI}`).innerHTML =
+    EXERCISES_TIMED[exI].steps.map((s,j) =>
+      renderExStep(exI, j, s, EXERCISES_TIMED[exI].steps.length)
+    ).join('');
+}
+
+// ── EXPOSURE LADDER ──────────────────────────────────────────────────────────
+let currentLadderId = null;
+
+function renderLadderList() {
+  const ladders = S.get('ladders') || [];
+  const el = document.getElementById('ladder-list');
+  if (!ladders.length) {
+    el.innerHTML = `<div class="card" style="text-align:center;color:var(--text2);margin-bottom:14px">
+      <p style="font-size:14px;margin-bottom:6px">No ladders yet</p>
+      <p style="font-size:13px">Create your first ladder below to start facing a fear gradually.</p>
+    </div>`;
+    return;
+  }
+  el.innerHTML = ladders.map(l => {
+    const done  = l.steps.filter(s => s.done).length;
+    const total = l.steps.length;
+    const pct   = total ? Math.round(done/total*100) : 0;
+    return `
+    <div class="card" style="margin-bottom:10px;cursor:pointer" onclick="openLadder('${l.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <p style="font-size:14px;font-weight:600;color:var(--text);margin:0;flex:1;padding-right:8px">${l.fear}</p>
+        <span style="font-size:12px;color:var(--teal);white-space:nowrap">${done}/${total} steps</span>
+      </div>
+      <div style="background:var(--card2);border-radius:99px;height:6px;overflow:hidden;margin-bottom:6px">
+        <div style="height:100%;border-radius:99px;background:var(--teal);width:${pct}%;transition:width 0.5s"></div>
+      </div>
+      <p style="font-size:12px;color:var(--text2);margin:0">${pct}% complete · Tap to view →</p>
+    </div>`;
+  }).join('');
+}
+
+function createLadder() {
+  const fear = document.getElementById('ladder-fear-input').value.trim();
+  if (!fear) { showToast('Please describe the fear you want to work on'); return; }
+  const ladders = S.get('ladders') || [];
+  const ladder  = { id: Date.now().toString(), fear, steps: [], createdAt: new Date().toISOString() };
+  ladders.push(ladder);
+  S.set('ladders', ladders);
+  document.getElementById('ladder-fear-input').value = '';
+  openLadder(ladder.id);
+  showToast('Ladder created! Add your first step 🪜');
+}
+
+function openLadder(id) {
+  currentLadderId = id;
+  const ladders = S.get('ladders') || [];
+  const ladder  = ladders.find(l => l.id === id);
+  if (!ladder) return;
+  document.getElementById('ladder-detail-title').textContent = '🪜 Ladder';
+  document.getElementById('ladder-detail-fear').textContent  = ladder.fear;
+  renderLadderSteps(ladder);
+  showScreen('ladder-detail');
+}
+
+function renderLadderSteps(ladder) {
+  const done  = ladder.steps.filter(s => s.done).length;
+  const total = ladder.steps.length;
+  const pct   = total ? Math.round(done/total*100) : 0;
+  document.getElementById('ladder-progress-label').textContent = `${done} / ${total} steps done`;
+  document.getElementById('ladder-progress-pct').textContent   = pct + '%';
+  document.getElementById('ladder-progress-bar').style.width   = pct + '%';
+
+  const sorted = [...ladder.steps].sort((a,b) => a.fearLevel - b.fearLevel);
+  const el = document.getElementById('ladder-steps-list');
+  if (!sorted.length) {
+    el.innerHTML = `<div class="card" style="text-align:center;color:var(--text2);margin-bottom:14px">
+      <p style="font-size:13px">No steps yet — add your first step below!</p>
+      <p style="font-size:12px;margin-top:6px">Start with something that feels only a little scary (fear level 1–3).</p>
+    </div>`;
+    return;
+  }
+  el.innerHTML = sorted.map((step, i) => {
+    const fearColor = step.fearLevel <= 3 ? 'var(--teal)'
+                    : step.fearLevel <= 6 ? 'var(--yellow)'
+                    : 'var(--pink)';
+    return `
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;
+      border-bottom:1px solid var(--border)">
+      <!-- fear level badge -->
+      <div style="width:32px;height:32px;border-radius:50%;flex-shrink:0;
+        background:${step.done?'var(--teal)':'var(--card2)'};
+        border:2px solid ${step.done?'var(--teal)':fearColor};
+        display:flex;align-items:center;justify-content:center;
+        font-size:12px;font-weight:600;color:${step.done?'#fff':fearColor};
+        margin-top:2px">${step.done?'✓':step.fearLevel}</div>
+      <div style="flex:1;min-width:0">
+        <p style="font-size:13px;color:${step.done?'var(--text2)':'var(--text)'};
+          line-height:1.5;margin:0 0 6px;
+          text-decoration:${step.done?'line-through':'none'}">${step.text}</p>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span style="font-size:11px;color:${fearColor};font-weight:600">
+            Fear level ${step.fearLevel}/10
+          </span>
+          <button class="btn btn-outline" style="font-size:11px;padding:4px 10px"
+            onclick="toggleLadderStep('${step.id}')">
+            ${step.done ? '↺ Mark undone' : '✓ Mark done'}
+          </button>
+          <button style="background:none;border:none;color:var(--pink);font-size:11px;cursor:pointer;padding:4px"
+            onclick="deleteLadderStep('${step.id}')">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addLadderStep() {
+  const text      = document.getElementById('ladder-step-input').value.trim();
+  const fearLevel = parseInt(document.getElementById('ladder-fear-level').value);
+  if (!text) { showToast('Please describe this step'); return; }
+  const ladders = S.get('ladders') || [];
+  const ladder  = ladders.find(l => l.id === currentLadderId);
+  if (!ladder) return;
+  ladder.steps.push({ id: Date.now().toString(), text, fearLevel, done: false, addedAt: new Date().toISOString() });
+  S.set('ladders', ladders);
+  document.getElementById('ladder-step-input').value = '';
+  document.getElementById('ladder-fear-level').value = '5';
+  document.getElementById('ladder-fear-val').textContent = '5';
+  renderLadderSteps(ladder);
+  showToast('Step added!');
+}
+
+function toggleLadderStep(stepId) {
+  const ladders = S.get('ladders') || [];
+  const ladder  = ladders.find(l => l.id === currentLadderId);
+  if (!ladder) return;
+  const step = ladder.steps.find(s => s.id === stepId);
+  if (!step) return;
+  step.done = !step.done;
+  if (step.done) step.completedAt = new Date().toISOString();
+  S.set('ladders', ladders);
+  renderLadderSteps(ladder);
+  if (step.done) {
+    showToast('Step completed! 🎉 You're making progress 💪');
+    if (navigator.vibrate) navigator.vibrate([100, 50, 200]);
+    // check if whole ladder done
+    if (ladder.steps.every(s => s.done)) {
+      setTimeout(() => showToast(`🏆 You faced "${ladder.fear}"! That took real courage.`), 1500);
+    }
+  }
+  updateHomeProgress();
+}
+
+function deleteLadderStep(stepId) {
+  const ladders = S.get('ladders') || [];
+  const ladder  = ladders.find(l => l.id === currentLadderId);
+  if (!ladder) return;
+  ladder.steps = ladder.steps.filter(s => s.id !== stepId);
+  S.set('ladders', ladders);
+  renderLadderSteps(ladder);
+}
+
+function deleteLadder() {
+  if (!confirm('Delete this entire ladder? This cannot be undone.')) return;
+  const ladders = S.get('ladders') || [];
+  S.set('ladders', ladders.filter(l => l.id !== currentLadderId));
+  currentLadderId = null;
+  showScreen('ladder');
+  showToast('Ladder deleted');
+}
 
 </script>
 </body>
