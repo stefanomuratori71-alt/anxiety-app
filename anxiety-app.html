@@ -1202,34 +1202,6 @@ function countDown(secs, cb) {
 }
 
 // ── EXERCISES ─────────────────────────────────────────────────────────────────
-function buildExercises() {
-  const colors = ['var(--teal)','var(--purple-light)','var(--orange)','var(--pink)','var(--yellow)','var(--teal)'];
-  document.getElementById('exercises-list').innerHTML = EXERCISES.map((ex,i) => `
-    <div class="exercise-card" onclick="toggleExercise(${i})">
-      <div class="exercise-header">
-        <span class="exercise-icon">${ex.icon}</span>
-        <div>
-          <p class="exercise-title">${ex.title}</p>
-          <p class="exercise-sub">${ex.sub}</p>
-        </div>
-        <span style="margin-left:auto;font-size:18px;color:var(--text2)" id="ex-arrow-${i}">▸</span>
-      </div>
-      <span class="tag" style="background:rgba(255,255,255,0.08);color:${colors[i]};border:1px solid ${colors[i]}40">${ex.tag}</span>
-      <div class="exercise-detail" id="ex-detail-${i}">
-        <ul class="step-list">
-          ${ex.steps.map((s,j)=>`<li><span class="step-num">${j+1}</span><span>${s}</span></li>`).join('')}
-        </ul>
-      </div>
-    </div>`).join('');
-}
-
-function toggleExercise(i) {
-  const detail = document.getElementById('ex-detail-'+i);
-  const arrow = document.getElementById('ex-arrow-'+i);
-  const open = detail.classList.toggle('open');
-  arrow.textContent = open ? '▾' : '▸';
-}
-
 // ── JOURNAL ───────────────────────────────────────────────────────────────────
 function buildJournal() {
   updateJournalPrompt();
